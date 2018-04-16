@@ -269,6 +269,7 @@ public class WxTools {
    	  
    	  @Override  
    	  public void wvHasClickEnvent(String title , String content , String imageUrl, String url) { 
+   		 
 
    		  }
 
@@ -295,8 +296,6 @@ public class WxTools {
 	   	  public void wvHasClickEnvent(String title , String content , String imageUrl, String url) { 
 	   		LogUtil.e("title:"+title+";content:"+content+";imageurl:"+imageUrl+";url:"+url);
 
-	   	
-	   		  
 	   	  }
 
 		@Override

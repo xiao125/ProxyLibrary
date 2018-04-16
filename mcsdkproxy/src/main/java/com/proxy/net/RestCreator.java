@@ -1,7 +1,7 @@
 package com.proxy.net;
 
 import com.proxy.configurator.ConfigKeys;
-import com.proxy.configurator.Proxys;
+import com.proxy.configurator.MCProxys;
 
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
@@ -48,7 +48,7 @@ public final class RestCreator {
      * 构建全局Retrofit客户端
      */
     private static final class RetrofitHolder {
-        private static final String BASE_URL = Proxys.getConfiguration(ConfigKeys.API_HOST);
+        private static final String BASE_URL = MCProxys.getConfiguration(ConfigKeys.API_HOST);
         private static final Retrofit RETROFIT_CLIENT = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(OKHttpHolder.OK_HTTP_CLIENT)

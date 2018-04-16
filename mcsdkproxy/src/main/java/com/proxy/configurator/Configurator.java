@@ -41,7 +41,7 @@ public class Configurator {
     public final void configure() {
 
         LATTE_CONFIGS.put(ConfigKeys.CONFIG_READY, true);
-      Utils.init(Proxys.getApplicationContext());
+      Utils.init(MCProxys.getApplicationContext());
     }
 
     public final Configurator withApiHost(String host) {
@@ -55,14 +55,24 @@ public class Configurator {
         return this;
     }
 
-    public final Configurator withAppId(String appid){
 
-        LATTE_CONFIGS.put(ConfigKeys.APP_ID,appid);
+    public final Configurator withGameID(String gameId){
+        LATTE_CONFIGS.put(ConfigKeys.GAME_ID,gameId);
+        return this;
+    }
+    public final Configurator withGameName(String gameName){
+        LATTE_CONFIGS.put(ConfigKeys.GAME_NAME,gameName);
         return this;
     }
 
-    public final Configurator withAppKey(String appKey){
-        LATTE_CONFIGS.put(ConfigKeys.APP_KEY,appKey);
+    public final Configurator withGamekey(String gamekey){
+        LATTE_CONFIGS.put(ConfigKeys.GAME_KEY,gamekey);
+        return this;
+    }
+
+
+    public final Configurator withGameOrientation(int Orientation){
+        LATTE_CONFIGS.put(ConfigKeys.GAME_ORIEN,Orientation);
         return this;
     }
 

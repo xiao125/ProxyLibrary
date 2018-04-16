@@ -1,13 +1,9 @@
 package com.proxy.bean;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import org.json.JSONObject;
-
-import com.proxy.OpenSDK;
 import com.proxy.Constants;
 import com.proxy.Data;
+import com.proxy.configurator.ConfigKeys;
+import com.proxy.configurator.MCProxys;
 import com.proxy.util.LogUtil;
 import com.proxy.util.Util;
 
@@ -42,6 +38,17 @@ public class GameInfo {
 		this.gameId = gameId;
 		this.screenOrientation = screenOrientation;
 	}
+
+	public GameInfo() {
+		super();
+		this.gameName = MCProxys.getConfiguration(ConfigKeys.GAME_NAME);
+		this.appKey =  MCProxys.getConfiguration(ConfigKeys.GAME_KEY);
+		this.gameId = MCProxys.getConfiguration(ConfigKeys.GAME_ID);
+		this.screenOrientation = MCProxys.getConfiguration(ConfigKeys.GAME_ORIEN);
+	}
+
+
+
 
 	public String getAdChannel() {
 		LogUtil.e("ad_channel="+adChannel);

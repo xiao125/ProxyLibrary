@@ -4,11 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.greenrobot.greendao.query.WhereCondition;
 import org.json.JSONObject;
-
 import android.app.Activity;
-import android.os.Build;
-
 import com.proxy.*;
 import com.proxy.bean.GameInfo;
 import com.proxy.bean.GameUser;
@@ -21,7 +19,6 @@ import com.proxy.net.RestClient;
 import com.proxy.net.callback.IError;
 import com.proxy.net.callback.IFailure;
 import com.proxy.net.callback.ISuccess;
-import com.proxy.sdk.channel.SDKConfig;
 import com.proxy.sdk.module.GeTuiPushModule;
 import com.proxy.task.CommonAsyncTask;
 import com.proxy.util.DeviceUtil;
@@ -292,199 +289,6 @@ public class HttpService {
 
 
 
-/*
-	public static void applyOrder( Activity activity ,KnPayInfo knPayInfo, BaseListener listener) {
-		try {
-
-			User userInfo = Data.getInstance().getUser();
-			GameInfo gameInfo = Data.getInstance().getGameInfo();
-			GameUser gamuser = Data.getInstance().getGameUser();
-
-			HashMap<String,String> params = getCommonParams();
-
-			String open_id = userInfo != null ? userInfo.getOpenId():"";
-			
-			String uid = gamuser!=null ? gamuser.getUid():"";
-			int server_id = gamuser!=null ?  gamuser.getServerId() : 0;
-			
-			String game_id = gameInfo != null ? gameInfo.getGameId() : "";
-			String platform = gameInfo != null ? gameInfo.getPlatform():"";
-			String channel = gameInfo != null ? gameInfo.getChannel():"";
-            LogUtil.e("=======uid"+uid+"::::server_id"+server_id+"------gameInfo"+gameInfo);
-
-			
-			
-			if(Util.getGameName(activity).equals("fmsg")){
-				
-			params.put("extra_info", knPayInfo.getExtraInfo());
-			
-			LogUtil.log("======封魔三国的订单号："+knPayInfo.getExtraInfo());
-				
-			}else {
-				
-				
-				params.put("extra_info", knPayInfo.getOrderNo());
-				
-			
-			
-			 if (Util.getChannle(activity).equals("nubia")) {
-				
-				
-				params.put("productName", knPayInfo.getProductName());
-				
-				
-			}if (Util.getChannle(activity).equals("dalv")) {
-				
-				params.put("productName",(knPayInfo.getPrice()/10+"元宝"));
-				params.put("amount",String.valueOf((knPayInfo.getPrice()/100)));
-				params.put("extend","充值元宝");
-				params.put("appid","et51ba58d87527a539");
-				params.put("gameArea",Data.getInstance().getGameUser().getServerName());
-				params.put("gameAreaId",String.valueOf(Data.getInstance().getGameUser().getServerId()));
-				params.put("roleId",Data.getInstance().getGameUser().getUid());
-				params.put("userRole",Data.getInstance().getGameUser().getUsername());
-				params.put("gameLevel",String.valueOf(Data.getInstance().getGameUser().getUserLevel()));
-								
-			}if (Util.getChannle(activity).equals("uc")) {
-				
-				double price=knPayInfo.getPrice();
-				params.put("amount",String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100));				
-				params.put("accountId",Data.getInstance().getGameUser().getExtraInfo());
-				params.put("callbackInfo","自定义信息");
-				
-				LogUtil.log("支付请求参数accountId====="+Data.getInstance().getGameUser().getExtraInfo()+"amount="+String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100));
-			
-			}
-			
-			if (Util.getChannle(activity).equals("mz")) {
-					
-				
-				double price=knPayInfo.getPrice();
-				params.put("mztotal_price",String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100)); //金额总数			
-				params.put("mzproduct_per_price",String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100));//游戏道具单价，默认值：总金额
-				params.put("mzapp_id",knPayInfo.getExtraInfo());//appid
-				
-				LogUtil.log("appid= "+knPayInfo.getExtraInfo());
-				params.put("mzuid",gamuser.getExtraInfo()); //sdk登录成功后的 uid
-				params.put("mzproduct_id",knPayInfo.getProductId());//CP 游戏道具 ID,
-				params.put("mzproduct_subject",knPayInfo.getProductName());//订单标题,格式为：”购买 N 枚金币”
-				params.put("mzproduct_unit","元");//游戏道具的单位，默认值：””
-				params.put("mzproduct_body","元宝");//游戏道具说明，默认值：””
-				params.put("mzbuy_amount",String.valueOf(1));//道具购买的数量，默认值：”1”
-    			params.put("mzcreate_time",userInfo.getExtenInfo());//创建时间戳
-				params.put("mzpay_type",String.valueOf(0));//支付方式，默认值：”0”（即定额支付）
-				params.put("mzuser_info","");//CP 自定义信息，默认值：””
-				params.put("mzsign_type","md5");//签名算法，默认值：”md5”(不能为空)
-				
-				
-				LogUtil.log("支付请求参数mzuid====="+gamuser.getExtraInfo()+" 创建时间戳="+userInfo.getExtenInfo()+"订单名称="+knPayInfo.getProductName()+" 总额="
-				+String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100)+" product_id="+knPayInfo.getProductId()+
-				" product_subject="+knPayInfo.getProductName()+" pay_type"+String.valueOf(0));
-			
-			
-			}if (Util.getChannle(activity).equals("duoku")) {
-				
-				
-				params.put("dkuid",gamuser.getExtraInfo());//支付传递的uid
-				params.put("dkextraInfo",userInfo.getExtenInfo());//透传
-				
-				LogUtil.log("下单发送游戏服务器dkuid="+gamuser.getExtraInfo()+"透传="+userInfo.getExtenInfo());
-				
-			}if (Util.getChannle(activity).equals("sanxing")) { //三星
-				
-				double price=knPayInfo.getPrice(); //金额					
-				params.put("SxPrice", String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100));
-				params.put("Sxappuserid",gamuser.getUid()); //用户在商户应用的唯一标识，建议为用户帐号。
-				params.put("SxCurrency","RMB"); //货币类型
-				params.put("SxWaresid",knPayInfo.getProductId()); //商品编号
-				
-			}if(Util.getChannle(activity).equals("jinli")){//金立
-				
-				double price=knPayInfo.getPrice();
-				params.put("jluid",gamuser.getExtraInfo()); //sdk登录成功返回的user_id。
-				params.put("jlsubject",knPayInfo.getProductName()); //商品名称
-				params.put("jltotal_fee",String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100)); //需支付金额
-				params.put("jldeliver_type","1"); //付款方式：1为立即付款，2为货到付款
-				params.put("jldeal_price",String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100)); //商品总金额
-				//params.put("jladChannel","2802003"); //后台兼容新老支付接口判断标识
-                
-			  }
-			}
-			
-			params.put("price" , String.valueOf(knPayInfo.getPrice()));						
-			params.put("extraInfo", knPayInfo.getExtraInfo());
-			
-			
-			params.put(
-					"sign",
-					Md5Util.getMd5(game_id + channel + platform + uid + open_id
-							+ server_id + gameInfo.getAppKey()));
-			
-			if(!Util.isNetWorkAvailable(activity)){
-				LoadingDialog.dismiss();
-				Util.ShowTips(activity,"请检查网络是否连接");
-				return ;
-			}
-			
-			new CommonAsyncTask(activity , Constants.URL.APPLY_ORDER, listener)
-					.execute(new Map[] { params, null, null });
-		} catch (Exception e) {
-			LoadingDialog.dismiss();
-			listener.onFail(new Result(ResultCode.FAIL, "申请订单号失败"));
-			e.printStackTrace();
-		}
-	}
-	*/
-
-
-	//发送等级url
-	/*public static void enterGame(BaseListener listener) {
-		try {
-
-			GameUser gameUser = Data.getInstance().getGameUser();
-
-			HashMap<String,String> params = getCommonParams();
-			
-			if(gameUser!=null){
-				params.put("lv", String.valueOf(gameUser.getUserLevel()));
-				params.put("extraInfo", gameUser.getExtraInfo());
-			}
-			
-			params.put("getuiClientId", GeTuiPushModule.getInstance().getClientId());
-			
-			LogUtil.e("params="+params.toString());
-			LogUtil.e("game_id"+Data.getInstance().getGameInfo().getGameId());
-			LogUtil.e("enter_url"+Constants.URL.ENTER_GAME);
-			new CommonAsyncTask(null , Constants.URL.ENTER_GAME, listener)
-					.execute(new Map[] { params, null, null });
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 	public static HashMap<String, String> getCommonParams(){
 		HashMap<String, String> params = new HashMap<String, String>();
 		
@@ -641,12 +445,11 @@ public class HttpService {
 
 	
 	//游戏开始push数据地址
-	public static void doPushData( final  Activity activity, Map<String,Object> data , BaseListener listener){
+	public static void doPushData( final  Activity activity, Map<String,Object> data ,final BaseListener listener){
 		
 		try{
-			
-			HashMap<String , String> params = new HashMap<String, String>();
-			
+
+			WeakHashMap<String , Object> params = new WeakHashMap<String, Object>();
 			params.put("game_id",(String) data.get("game_id"));
 			params.put("app_key",(String) data.get("app_key"));
 			params.put("imei",(String) data.get("imei"));
@@ -658,13 +461,42 @@ public class HttpService {
 			
 			String game_id = (String) data.get("game_id");
 			String appkey = (String) data.get("app_key");
-			String imei    = (String) data.get("imei");
+			String imei   = (String) data.get("imei");
 	
 			
 			params.put("sign",Md5Util.getMd5(game_id+appkey+imei));
-			
-			new CommonAsyncTask(null, Constants.URL.PUSH_DATA, listener).execute(new Map[] { params, null, null });
-			
+
+
+
+			//网络请求
+			RestClient.builder()
+					.url( Constants.URLS.PUSH_DATA)
+					.params(params)
+					.success(new ISuccess() {
+						@Override
+						public void onSuccess(String response) {
+
+							LogUtil.log("push数据成功，response"+response);
+							listener.onSuccess(response);
+						}
+					})
+					.error(new IError() {
+						@Override
+						public void onError(int code, String msg) {
+
+							LogUtil.log("push数据失败，code"+code+",msg:"+msg);
+							listener.onFail(msg);
+						}
+					})
+					.failure(new IFailure() {
+						@Override
+						public void onFailure() {
+
+						}
+					})
+					.build()
+					.post();
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -673,13 +505,13 @@ public class HttpService {
 	
 	
 	//游戏邀请码数据请求地址
-	public static void doPushActivation(final Activity activity , Map<String,Object> data ,  BaseListener listener){
+	public static void doPushActivation(final Activity activity , Map<String,Object> data , final BaseListener listener){
 		
 		try{
 				
 //				KnLog.e(data.toString());
 		
-				HashMap<String , String> params = new HashMap<String, String>();
+				WeakHashMap<String , Object> params = new WeakHashMap<String, Object>();
 				
 				params.put("m",(String) data.get("m"));
 				params.put("a",(String) data.get("a"));
@@ -699,8 +531,36 @@ public class HttpService {
 				
 				
 				LogUtil.e("params:"+params.toString());
-				
-				new CommonAsyncTask(activity, Constants.URL.ACTIVATION, listener).execute(new Map[] { params, null, null });
+
+			//网络请求
+			RestClient.builder()
+					.url( Constants.URLS.ACTIVATION)
+					.params(params)
+					.success(new ISuccess() {
+						@Override
+						public void onSuccess(String response) {
+							listener.onSuccess(response);
+						}
+					})
+					.error(new IError() {
+						@Override
+						public void onError(int code, String msg) {
+
+							LogUtil.log("游戏邀请码数据失败，code"+code+",msg:"+msg);
+							listener.onFail(msg);
+						}
+					})
+					.failure(new IFailure() {
+						@Override
+						public void onFailure() {
+
+						}
+					})
+					.build()
+					.post();
+
+
+			//	new CommonAsyncTask(activity, Constants.URL.ACTIVATION, listener).execute(new Map[] { params, null, null });
 				
 			}catch(Exception e){
 				e.printStackTrace();
@@ -724,5 +584,203 @@ public class HttpService {
 			e.printStackTrace();
 		}
 	}
-	
+
+
+
+
+
+/*
+	public static void applyOrder( Activity activity ,KnPayInfo knPayInfo, BaseListener listener) {
+		try {
+
+			User userInfo = Data.getInstance().getUser();
+			GameInfo gameInfo = Data.getInstance().getGameInfo();
+			GameUser gamuser = Data.getInstance().getGameUser();
+
+			HashMap<String,String> params = getCommonParams();
+
+			String open_id = userInfo != null ? userInfo.getOpenId():"";
+
+			String uid = gamuser!=null ? gamuser.getUid():"";
+			int server_id = gamuser!=null ?  gamuser.getServerId() : 0;
+
+			String game_id = gameInfo != null ? gameInfo.getGameId() : "";
+			String platform = gameInfo != null ? gameInfo.getPlatform():"";
+			String channel = gameInfo != null ? gameInfo.getChannel():"";
+            LogUtil.e("=======uid"+uid+"::::server_id"+server_id+"------gameInfo"+gameInfo);
+
+
+
+			if(Util.getGameName(activity).equals("fmsg")){
+
+			params.put("extra_info", knPayInfo.getExtraInfo());
+
+			LogUtil.log("======封魔三国的订单号："+knPayInfo.getExtraInfo());
+
+			}else {
+
+
+				params.put("extra_info", knPayInfo.getOrderNo());
+
+
+
+			 if (Util.getChannle(activity).equals("nubia")) {
+
+
+				params.put("productName", knPayInfo.getProductName());
+
+
+			}if (Util.getChannle(activity).equals("dalv")) {
+
+				params.put("productName",(knPayInfo.getPrice()/10+"元宝"));
+				params.put("amount",String.valueOf((knPayInfo.getPrice()/100)));
+				params.put("extend","充值元宝");
+				params.put("appid","et51ba58d87527a539");
+				params.put("gameArea",Data.getInstance().getGameUser().getServerName());
+				params.put("gameAreaId",String.valueOf(Data.getInstance().getGameUser().getServerId()));
+				params.put("roleId",Data.getInstance().getGameUser().getUid());
+				params.put("userRole",Data.getInstance().getGameUser().getUsername());
+				params.put("gameLevel",String.valueOf(Data.getInstance().getGameUser().getUserLevel()));
+
+			}if (Util.getChannle(activity).equals("uc")) {
+
+				double price=knPayInfo.getPrice();
+				params.put("amount",String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100));
+				params.put("accountId",Data.getInstance().getGameUser().getExtraInfo());
+				params.put("callbackInfo","自定义信息");
+
+				LogUtil.log("支付请求参数accountId====="+Data.getInstance().getGameUser().getExtraInfo()+"amount="+String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100));
+
+			}
+
+			if (Util.getChannle(activity).equals("mz")) {
+
+
+				double price=knPayInfo.getPrice();
+				params.put("mztotal_price",String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100)); //金额总数
+				params.put("mzproduct_per_price",String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100));//游戏道具单价，默认值：总金额
+				params.put("mzapp_id",knPayInfo.getExtraInfo());//appid
+
+				LogUtil.log("appid= "+knPayInfo.getExtraInfo());
+				params.put("mzuid",gamuser.getExtraInfo()); //sdk登录成功后的 uid
+				params.put("mzproduct_id",knPayInfo.getProductId());//CP 游戏道具 ID,
+				params.put("mzproduct_subject",knPayInfo.getProductName());//订单标题,格式为：”购买 N 枚金币”
+				params.put("mzproduct_unit","元");//游戏道具的单位，默认值：””
+				params.put("mzproduct_body","元宝");//游戏道具说明，默认值：””
+				params.put("mzbuy_amount",String.valueOf(1));//道具购买的数量，默认值：”1”
+    			params.put("mzcreate_time",userInfo.getExtenInfo());//创建时间戳
+				params.put("mzpay_type",String.valueOf(0));//支付方式，默认值：”0”（即定额支付）
+				params.put("mzuser_info","");//CP 自定义信息，默认值：””
+				params.put("mzsign_type","md5");//签名算法，默认值：”md5”(不能为空)
+
+
+				LogUtil.log("支付请求参数mzuid====="+gamuser.getExtraInfo()+" 创建时间戳="+userInfo.getExtenInfo()+"订单名称="+knPayInfo.getProductName()+" 总额="
+				+String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100)+" product_id="+knPayInfo.getProductId()+
+				" product_subject="+knPayInfo.getProductName()+" pay_type"+String.valueOf(0));
+
+
+			}if (Util.getChannle(activity).equals("duoku")) {
+
+
+				params.put("dkuid",gamuser.getExtraInfo());//支付传递的uid
+				params.put("dkextraInfo",userInfo.getExtenInfo());//透传
+
+				LogUtil.log("下单发送游戏服务器dkuid="+gamuser.getExtraInfo()+"透传="+userInfo.getExtenInfo());
+
+			}if (Util.getChannle(activity).equals("sanxing")) { //三星
+
+				double price=knPayInfo.getPrice(); //金额
+				params.put("SxPrice", String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100));
+				params.put("Sxappuserid",gamuser.getUid()); //用户在商户应用的唯一标识，建议为用户帐号。
+				params.put("SxCurrency","RMB"); //货币类型
+				params.put("SxWaresid",knPayInfo.getProductId()); //商品编号
+
+			}if(Util.getChannle(activity).equals("jinli")){//金立
+
+				double price=knPayInfo.getPrice();
+				params.put("jluid",gamuser.getExtraInfo()); //sdk登录成功返回的user_id。
+				params.put("jlsubject",knPayInfo.getProductName()); //商品名称
+				params.put("jltotal_fee",String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100)); //需支付金额
+				params.put("jldeliver_type","1"); //付款方式：1为立即付款，2为货到付款
+				params.put("jldeal_price",String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(price))/100)); //商品总金额
+				//params.put("jladChannel","2802003"); //后台兼容新老支付接口判断标识
+
+			  }
+			}
+
+			params.put("price" , String.valueOf(knPayInfo.getPrice()));
+			params.put("extraInfo", knPayInfo.getExtraInfo());
+
+
+			params.put(
+					"sign",
+					Md5Util.getMd5(game_id + channel + platform + uid + open_id
+							+ server_id + gameInfo.getAppKey()));
+
+			if(!Util.isNetWorkAvailable(activity)){
+				LoadingDialog.dismiss();
+				Util.ShowTips(activity,"请检查网络是否连接");
+				return ;
+			}
+
+			new CommonAsyncTask(activity , Constants.URL.APPLY_ORDER, listener)
+					.execute(new Map[] { params, null, null });
+		} catch (Exception e) {
+			LoadingDialog.dismiss();
+			listener.onFail(new Result(ResultCode.FAIL, "申请订单号失败"));
+			e.printStackTrace();
+		}
+	}
+	*/
+
+
+	//发送等级url
+	/*public static void enterGame(BaseListener listener) {
+		try {
+
+			GameUser gameUser = Data.getInstance().getGameUser();
+
+			HashMap<String,String> params = getCommonParams();
+
+			if(gameUser!=null){
+				params.put("lv", String.valueOf(gameUser.getUserLevel()));
+				params.put("extraInfo", gameUser.getExtraInfo());
+			}
+
+			params.put("getuiClientId", GeTuiPushModule.getInstance().getClientId());
+
+			LogUtil.e("params="+params.toString());
+			LogUtil.e("game_id"+Data.getInstance().getGameInfo().getGameId());
+			LogUtil.e("enter_url"+Constants.URL.ENTER_GAME);
+			new CommonAsyncTask(null , Constants.URL.ENTER_GAME, listener)
+					.execute(new Map[] { params, null, null });
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -5,7 +5,7 @@ import android.os.Handler;
 import com.proxy.Loader.LatteLoader;
 import com.proxy.Loader.LoaderStyle;
 import com.proxy.configurator.ConfigKeys;
-import com.proxy.configurator.Proxys;
+import com.proxy.configurator.MCProxys;
 import com.proxy.net.RestCreator;
 import com.proxy.util.LogUtil;
 
@@ -24,7 +24,7 @@ public final class RequestCallbacks implements Callback<String> {
     private final IFailure FAILURE;
     private final IError ERROR;
     private final LoaderStyle LOADER_STYLE;
-    private static final Handler HANDLER = Proxys.getHandler(); //获取hander
+    private static final Handler HANDLER = MCProxys.getHandler(); //获取hander
 
     public RequestCallbacks(IRequest request, ISuccess success, IFailure failure, IError error, LoaderStyle style ) {
         this.REQUEST = request;
@@ -69,7 +69,7 @@ public final class RequestCallbacks implements Callback<String> {
     }
 
     private void onRequestFinish() {
-        final long delayed = Proxys.getConfiguration(ConfigKeys.LOADER_DELAYED); //获取网络延迟时间，默认0
+        final long delayed = MCProxys.getConfiguration(ConfigKeys.LOADER_DELAYED); //获取网络延迟时间，默认0
         if (LOADER_STYLE != null) {
             HANDLER.postDelayed(new Runnable() {
                 @Override

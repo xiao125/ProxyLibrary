@@ -1,13 +1,16 @@
 package com.proxy.sdk.channel;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import com.game.sdk.GameSDK;
 import com.game.sdk.bean.GameInfo;
-import com.game.sdk.floatmenu.c;
+import com.game.sdk.floatmenu.SusViewMager;
 import com.game.sdk.listener.LoginListener;
 import com.proxy.Data;
 import com.proxy.OpenSDK;
@@ -89,6 +92,7 @@ public class SdkChannel extends SdkProxy {
 
 
 
+
 			LogUtil.log("点击初始化");
 		   LogUtil.log("channel="+mGameInfo.getAdChannel());
 			GameInfo info = new GameInfo(mGameInfo.getAppKey(), mGameInfo.getGameId(), mGameInfo.getChannel(), mGameInfo.getPlatform(), mGameInfo.getAdChannel(), mGameInfo.getScreenOrientation() , mGameInfo.getAdChannelTxt());
@@ -100,24 +104,7 @@ public class SdkChannel extends SdkProxy {
 					+mGameInfo.getScreenOrientation()+mGameInfo.getAdChannelTxt());
 			
 			gameSDK.initSDK(mActivity ,info );
-			
-			// IAppPay.init(mActivity, IAppPay.LANDSCAPE,SDKConfig.appid); //需要渠道分包功能，请传入对应渠道标识ACID, 可以为空
-			
-			if( Util.fileExits(mActivity ,"SDKFile/config.png")){
-			
-				gameSDK.initIappaySDK( mActivity,Util.getApiappId(mActivity) , Util.getApiprivateKey(mActivity) ,  Util.getApipublicKey(mActivity)  );			
-			
-			LogUtil.log("爱贝支付初始化成功1="+Util.getApiappId(mActivity) +" privateKey="+Util.getApiprivateKey(mActivity)+" publicKey="+Util.getApipublicKey(mActivity) );
-			
-			}else{
-				
-				gameSDK.initIappaySDK( mActivity, SDKConfig.appid ,SDKConfig.privateKey , SDKConfig.publicKey );			
-				LogUtil.log("爱贝支付初始化成功2="+SDKConfig.appid +" privateKey="+SDKConfig.privateKey+" publicKey="+SDKConfig.publicKey);
 
-			}
-
-
-            
 			
 		}
 	
@@ -183,7 +170,7 @@ public class SdkChannel extends SdkProxy {
 	@Override
 	public void onPause() {
 		
-		//gameSDK.hideFloat();
+
 		super.onPause();
 		
 	   LogUtil.log("onPause");
@@ -192,27 +179,34 @@ public class SdkChannel extends SdkProxy {
 	@Override
 	public void onStop() {
 		super.onStop();
+
 		LogUtil.log("onStop");
 		
 	}
+
+
 
 	@Override
 	public void onRestart() {
 		
 		super.onRestart();
-		
-		
+
+
 		LogUtil.log("onRestart");
-		
-		
-		
-		
+
 	}
+
+
+
 
 	@Override
 	public void onDestroy() {
-		
-		//gameSDK.destoryFloat();
+		//gameSDK.hideFloat();
+
+			gameSDK.destoryFloat();
+
+
+
 		super.onDestroy();	
 
 		LogUtil.log("onDestroy");
@@ -264,6 +258,7 @@ public class SdkChannel extends SdkProxy {
 		String gameId = Data.getInstance().getGameInfo().getGameId();
 
 
+
 		gameSDK.login(activity, new LoginListener() {
 
 			@Override
@@ -306,12 +301,13 @@ public class SdkChannel extends SdkProxy {
 				LogUtil.log("res+fal" + result.toString());
 				mLoginListener.onFail(result.toString());
 			}
-		}, new c.a() {
+		}, new SusViewMager.a() {
 			@Override
 			public void a() {
 				kNListener.getLogoutListener().onSuccess(1);
 			}
 		});
+
 
 
 	}
@@ -326,7 +322,7 @@ public class SdkChannel extends SdkProxy {
 		super.pay(activity,knPayInfo);
 
 		
-	//	final PayInfo payInfo = new PayInfo();
+		//final PayInfo payInfo = new PayInfo();
 		LoadingDialog.show(activity, "正在申请订单", false);
 		LogUtil.log("订单申请");
 		HttpService.applyOrder(activity, knPayInfo, new BaseListener() {
@@ -390,7 +386,7 @@ public class SdkChannel extends SdkProxy {
 		//游戏切换账号接口
 		//gameSDK.McLogout(mActivity);
 
-		gameSDK.McLogout(new c.a() {
+		gameSDK.McLogout(new SusViewMager.a() {
 			@Override
 			public void a() {
 				kNListener.getLogoutListener().onSuccess(2);
@@ -408,9 +404,6 @@ public class SdkChannel extends SdkProxy {
 			LogUtil.log("退出游戏");
 
 
-			
-
-
 		}
 
 		@Override
@@ -421,7 +414,8 @@ public class SdkChannel extends SdkProxy {
 			LogUtil.log("调用sdk注销登录");
 				
 		}
-		
+
+		//游戏邀请码（暂时没用）
 		public void pushActivation(  final Activity activity , final Map<String, Object>  data  ){
 			
 			HttpService.doPushActivation(activity, data,  new BaseListener() {
@@ -443,18 +437,16 @@ public class SdkChannel extends SdkProxy {
 			} );
 	 	
 		}
-		
-		
-		//上报
+
+
+	    //游戏开始push数据地址
 		public void pushData( final Activity activity , Map<String,Object> data ){
 			
 			HttpService.doPushData(activity, data, new BaseListener() {
 				
 				@Override
 				public void onSuccess(Object result) {
-					
-					
-					
+
 				}
 				
 				@Override

@@ -1,12 +1,9 @@
 package com.proxy.sdk;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -15,10 +12,7 @@ import com.proxy.Constants;
 import com.proxy.Data;
 import com.proxy.Splash;
 import com.proxy.bean.FuncButton;
-import com.proxy.bean.Channel;
 import com.proxy.bean.KnPayInfo;
-import com.proxy.listener.BaseListener;
-import com.proxy.listener.InvitationListener;
 import com.proxy.listener.SplashListener;
 import com.proxy.sdk.channel.SdkChannel;
 import com.proxy.sdk.module.BuglyModule;
@@ -26,14 +20,10 @@ import com.proxy.sdk.module.DataEyeModule;
 import com.proxy.sdk.module.GeTuiPushModule;
 import com.proxy.sdk.module.LeBianModule;
 import com.proxy.sdk.module.ReYunModule;
-import com.proxy.sdk.module.SharedModule;
 import com.proxy.sdk.module.UmengModule;
 import com.proxy.sdk.module.WeixinModule;
-import com.proxy.sdk.module.YunwaModule;
-import com.proxy.task.CommonAsyncTask;
 import com.proxy.util.LogUtil;
 import com.proxy.util.Util;
-import com.proxy.util.WxTools;
 
 public class SdkCenter {
 	
@@ -43,8 +33,6 @@ public class SdkCenter {
 	private Data kndata = Data.getInstance();
 	private DataEyeModule  m_dataEye = DataEyeModule.getInstance();
 	private WeixinModule   m_wxModule = WeixinModule.getInstance();
-	private SharedModule   m_shModule = SharedModule.getInstance();
-	private YunwaModule    m_yunwaModule = YunwaModule.getInstance();
 	private LeBianModule    m_leBian = LeBianModule.getInstance();
 	private ReYunModule    m_reYun = ReYunModule.getInstance();
 	
@@ -86,17 +74,17 @@ public class SdkCenter {
 		//添加微信分享模块
 		m_wxModule.init(activity);
 		//添加sharedsdk分享模块
-		m_shModule.init(activity);
+	//	m_shModule.init(activity);
 		
 		//添加语音接口
-		boolean m_yuyinInit = m_yunwaModule.init(activity);
+	/*	boolean m_yuyinInit = m_yunwaModule.init(activity);
 		if(true == m_yuyinInit){
 			LogUtil.e("语音初始化成功ccccccccccccccccccccccccccccc");
 			m_yunwaModule.setAppversion(activity);
 		}else{
 			LogUtil.e("语音初始化失败");
 		}
-		
+		*/
 		//添加友盟接口(初始化)
 		activity.runOnUiThread(new Runnable() {
 			

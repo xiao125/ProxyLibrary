@@ -7,12 +7,14 @@ package com.proxy.configurator;
 public enum  ConfigKeys {
 
     API_HOST, //统一的host地址
-    APP_ID,
-    APP_KEY,
     APPLICATION_CONTEXT, //设置app上下文
     CONFIG_READY, //初始化
     LOADER_DELAYED,//设置延时时间
     ACTIVITY, //activity
     HANDLER, //设置handler
-    JAVASCRIPT_INTERFACE
+    JAVASCRIPT_INTERFACE,
+    GAME_ID,
+    GAME_NAME,
+    GAME_KEY,
+    GAME_ORIEN
 }

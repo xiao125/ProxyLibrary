@@ -8,7 +8,7 @@ import android.os.Handler;
  *
  */
 
-public class Proxys {
+public class MCProxys {
 
     public static Configurator init(Context context) {
         Configurator.getInstance()
@@ -41,6 +41,37 @@ public class Proxys {
     }
 
 
+    /**
+     * 游戏分配的gameId
+     * @return
+     */
+    public static Activity getGameId() {
+        return getConfiguration(ConfigKeys.GAME_ID);
+    }
 
+
+    /**
+     * 游戏名字
+     * @return
+     */
+    public static Activity getGameName() {
+        return getConfiguration(ConfigKeys.GAME_NAME);
+    }
+
+    /**
+     * 游戏分配的key
+     * @return
+     */
+    public static Activity getGameKey() {
+        return getConfiguration(ConfigKeys.GAME_KEY);
+    }
+
+    /**
+     * 游戏横竖屏：0: 横屏 1：竖屏
+     * @return
+     */
+    public static Activity getGameOrien() {
+        return getConfiguration(ConfigKeys.GAME_ORIEN);
+    }
 
 }

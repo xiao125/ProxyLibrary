@@ -1,8 +1,6 @@
 package com.proxy.activity;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import com.proxy.OpenSDK;
 import com.proxy.R;
 import com.proxy.util.DeviceUtil;
@@ -382,7 +380,6 @@ public class StartWebView extends Activity implements OnClickListener {
 
 			LogUtil.e("title:" + title + "content:" + content + "imageUrl:"
 					+ imageUrl + "url:" + url);
-
 
 		}
 

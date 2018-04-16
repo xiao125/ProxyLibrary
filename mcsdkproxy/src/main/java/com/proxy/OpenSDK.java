@@ -1,7 +1,6 @@
 package com.proxy;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -10,7 +9,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.proxy.activity.Invitation;
 import com.proxy.activity.StartWebView;
 import com.proxy.bean.FuncButton;
@@ -25,21 +23,16 @@ import com.proxy.listener.LogoutListener;
 import com.proxy.listener.PayListener;
 import com.proxy.listener.PushActivationListener;
 import com.proxy.listener.PushDataListener;
-import com.proxy.listener.WeixinListener;
 import com.proxy.sdk.SdkCenter;
 import com.proxy.sdk.module.DataEyeModule;
-import com.proxy.sdk.module.SharedModule;
-import com.proxy.sdk.module.YunwaModule;
 import com.proxy.service.HttpService;
 import com.proxy.task.CommonAsyncTask;
 import com.proxy.util.DeviceUtil;
 import com.proxy.util.LogUtil;
 import com.proxy.util.Util;
 import com.proxy.util.WxTools;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
@@ -48,9 +41,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-
-//import android.util.Log;
-//import com.reyun.sdk.ReYunChannel;
 
 /**
  * 酷牛sdk
@@ -91,12 +81,14 @@ public class OpenSDK {
 	/**
 	 * proxy初始化
 	 * @param activity 游戏的主Activity
-	 * @param gameInfo	游戏信息
+	 * @param
 	 */
-	public void init(final Activity activity ,GameInfo gameInfo , InitListener initlistenr){
+	public void init(final Activity activity , InitListener initlistenr){
 		
 		mActivity = activity ;
-		
+
+		GameInfo gameInfo1 = new GameInfo();
+
 		sdkLogInit(mActivity);
 		
 		
@@ -108,12 +100,12 @@ public class OpenSDK {
 			Util.writeInfoLog("\tSDK初始化方法init中初始化监听不能为空");
 		}
 		
-		LogUtil.setLogEnable(true);
+		LogUtil.setLogEnable(false);
 		knListener.setInitListener(initlistenr);
 		Data.getInstance().setGameActivity(activity);
-		LogUtil.e("setappkey :"+gameInfo.getAppKey());
+		LogUtil.e("setappkey :"+gameInfo1.getAppKey());
 		
-		Data.getInstance().setGameInfo(gameInfo);
+		Data.getInstance().setGameInfo(gameInfo1);
 		this.onCreate(activity);
 		
 		isInited = true ;
@@ -190,22 +182,7 @@ public class OpenSDK {
 		sdkCenter.showUserCenter();
 	}
 	
-	/**
-	 * 		微信分享
-	 */
-	
-	public void setWeixinListener( WeixinListener listener ){
-		knListener.setWeixinListener(listener);
-		
-		if(null==listener){
-			Util.writeInfoLog("\tSDK初始化方法setWeixinListener中初始化监听不能为空");
-		}
-	}
-	
-	public WeixinListener  getWeixinListener(){
-		return knListener.getWeixinListener();
-	}
-	
+
 	/**
 	 * 设置登陆回调
 	 * @param listener
@@ -775,32 +752,6 @@ public class OpenSDK {
 	
 	
 	
-	//直接调用的方式
-	/*public void sharedImageWx( final Activity act , final String title , final String text ,final String pngPath , final PlatformActionListener listener ){
-		SharedModule.getInstance().shared(act, title, text, pngPath, listener);
-	}
-	
-	public void sharedImageWx( final Activity act , String title , String content , String imagePath , String url ,  final PlatformActionListener listener ){
-		SharedModule.getInstance().shared(act, title, content , imagePath , url ,  listener);
-	}
-	
-	
-	public void sharedTextWx( final Activity act , final String title , final String text ,final String pngPath , final PlatformActionListener listener ){
-		SharedModule.getInstance().sharedText(act, title, text, pngPath, listener);
-	}
-	
-
-	public void shared(final Activity act , String title , String content , String imageUrl , String url ,  final PlatformActionListener listener ){
-		SharedModule.getInstance().shared(act, title, content, imageUrl, url, listener);
-	}
-	
-	public void sharedImageUrl(final Activity act , String title , String content , String imageUrl , String url ,  final PlatformActionListener listener ){
-		SharedModule.getInstance().sharedImageUrl(act, title, content, imageUrl, url, listener);
-	}
-	
-	public void sharedVedio( final Activity act , final String pngPath , final String url , final String title , final String text , final PlatformActionListener listener ){
-		SharedModule.getInstance().sharedVedio(mActivity, pngPath, url, title, text, listener);
-	}*/
 
 	//		是否是模拟器
 	public boolean isEmulator( Context ctx ){
@@ -840,11 +791,7 @@ public class OpenSDK {
 			return false ;
 		}
 	}
-	
 
-
-
-	
 	
 	//显示邀请码
 	public void inviteShows(final Activity activity , final InvitationListener listener ){

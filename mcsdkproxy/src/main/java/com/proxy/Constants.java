@@ -70,7 +70,7 @@ public class Constants {
 		public static String LOGIN ="/api/login_check.php";								//登陆url
 		public static String APPLY_ORDER ="/api/apply_order.php";							//请求订单url
 		public static String ENTER_GAME ="/api/open_platform/datacenter/sendlv.php";		//发送等级url
-		public static String PUSH_DATA = OMD_URLS+"/api/record_activate.php";						//游戏开始push数据地址
+		public static String PUSH_DATA ="/api/record_activate.php";						//游戏开始push数据地址
 		public static String ACTIVATION = "http://"+yqmUrl+"/api.php" ;  									//游戏邀请码数据请求地址
 		public static String SDKUPDATEURL = "http://"+versionUprl+"/api.php";								//版本强更
 		public static String wxPayURL = "http://oms.szkuniu.com/api/order_transfor.php";       //微信订单转换接口

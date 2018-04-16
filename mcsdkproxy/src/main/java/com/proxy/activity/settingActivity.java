@@ -80,7 +80,7 @@ public class settingActivity extends AppCompatActivity {
 		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		params.gravity = Gravity.CENTER | Gravity.CENTER_HORIZONTAL;  
 		LinearLayout layout = new LinearLayout(this);
-		layout.setOrientation(LinearLayout.VERTICAL);
+		layout.setOrientation(1);
 
 		
 		for (int i = 0; i < btns.length; i++) {

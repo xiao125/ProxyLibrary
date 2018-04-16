@@ -39,56 +39,33 @@ public class TestActivity extends Activity {
     public static int       HEIGHT = 0 ;
 
 
-
-
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
+    public void onBackPressed() {
 
-        if(m_proxy.onKeyUp(keyCode, event)){
-            if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-                return false ;
-            }
-        }else if(m_proxy.hasThirdPartyExit()){
-            m_proxy.onThirdPartyExit();
 
-        }else{
-            // TODO Auto-generated method stub
-            if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+             AlertDialog alertDialog = new AlertDialog.Builder(TestActivity.this)
+                     .setTitle("提示")
+                     // 对话框消息
+                     .setMessage("是否要退出游戏？")
+                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialog, int which) {
 
-                // 确认对话框
-                final AlertDialog isExit = new AlertDialog.Builder(this).create();
-                // 对话框标题
-                isExit.setTitle("提示");
-                // 对话框消息
-                isExit.setMessage("是否要退出游戏？");
-                // 实例化对话框上的按钮点击事件监听
-                DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case AlertDialog.BUTTON1:// "确认"按钮退出程序
-                                System.exit(0);
-                                finish();
-                                //  玩家登出
-                                m_proxy.logOut();
-                                break;
-                            case AlertDialog.BUTTON2:// "取消"第二个按钮取消对话框
-                                isExit.cancel();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                };
-                // 注册监听
-               /* isExit.setButton("确定", listener);
-                isExit.setButton2("取消", listener);*/
-                // 显示对话框
-                isExit.show();
-                return false;
-            }
-        }
-        return super.onKeyUp(keyCode, event);
+                             finish();
+                         }
+                     }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialog, int which) {
+                             dialog.cancel();
+                         }
+                     }).show();
+
+
+
     }
+
+
+
 
     @Override
     protected void onDestroy() {
@@ -123,10 +100,9 @@ public class TestActivity extends Activity {
 
 
             public void run() {
-                GameInfo m_gameInfo = new GameInfo(m_gameName, m_appKey, m_gameId,m_screenOrientation);
 
                 // TODO Auto-generated method stub
-                m_proxy.init(m_activity, m_gameInfo , new InitListener() {
+                m_proxy.init(m_activity , new InitListener() {
 
 
                     public void onSuccess(Object arg0) {
@@ -155,7 +131,6 @@ public class TestActivity extends Activity {
                 }else if(result.equals(2)) {
                     Log.d("GAT","游戏内切换账号登出成功");
                     //游戏账号注销，返回到登录界面
-
                 }
 
 
@@ -211,20 +186,6 @@ public class TestActivity extends Activity {
             }
         });
 
-        m_proxy.setWeixinListener(new WeixinListener() {
-
-
-            public void onSuccess(Object result) {
-                // TODO Auto-generated method stub
-
-            }
-
-
-            public void onFail(Object result) {
-                // TODO Auto-generated method stub
-
-            }
-        });
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -349,12 +310,12 @@ public class TestActivity extends Activity {
 
 
 
-    @Override
+   /* @Override
     public void onBackPressed() {
         // TODO Auto-generated method stub
         super.onBackPressed();
         m_proxy.onBackPressed();
     }
-
+*/
 
 }
