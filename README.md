@@ -18,7 +18,7 @@
 dependencies {
 
 
-		compile 'com.github.xiao125:ProxyLibrary:v0.1.1'
+		compile 'com.github.xiao125:ProxyLibrary:v0.1.2'
 		
 		
 		
